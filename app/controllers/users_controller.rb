@@ -3,13 +3,18 @@ class UsersController < ApplicationController
   end
 
   def create
-    if User.find_by({ "email" => params["email"] }) == nil
+    require 'bycrypt'
+
+    existing_user = User.find_by({"email" => params["email"]})
+
+    if existing_user == nil
       @user = User.new
       @user["first_name"] = params["first_name"]
       @user["last_name"] = params["last_name"]
       @user["email"] = params["email"]
       # TODO: encrypt user's password "at rest"
-      @user["password"] = params["password"]
+      password = BCrypt::Password.create(params["password"])
+      @user["password"] = password
       @user.save
       redirect_to "/login"
     else
