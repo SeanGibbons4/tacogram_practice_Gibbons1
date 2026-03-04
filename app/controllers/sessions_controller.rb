@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
       flash["notice"] = "Nope."
       redirect_to "/login"
     else
-      if = BCrypt::Password.new(user["password"]) == params["password"]
+      if BCrypt::Password.new(user["password"]) == params["password"]
         session["user_id"] = user["id"]
         flash["notice"] = "Sucessful Login"
         redirect_to "/posts"
